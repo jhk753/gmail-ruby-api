@@ -13,6 +13,9 @@ tmtags
 ## VIM
 *.swp
 
+## rubymine
+.idea
+
 ## PROJECT::GENERAL
 coverage
 rdoc
@@ -21,7 +24,6 @@ Gemfile.lock
 
 ## PROJECT::SPECIFIC
 *.rdb
-.idea
 
 ## Test Account details
 spec/account.yml
