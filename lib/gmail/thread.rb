@@ -15,5 +15,18 @@ module Gmail
 
     end
 
+    def unread_messages
+
+      messages.select{|m| m.unread?}
+
+    end
+
+
+    def sent_messages
+
+      messages.select{|m| m.sent?}
+
+    end
+
   end
 end

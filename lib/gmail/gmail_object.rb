@@ -16,7 +16,6 @@ module Gmail
 
 
     def to_s(*args)
-      p @values
       JSON.pretty_generate(@values.to_hash)
     end
 

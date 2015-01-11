@@ -20,6 +20,7 @@ module Gmail
     def deliver
       response = Gmail.request(self.class.base_method.to_h['gmail.users.messages.send'],{}, msg_parameters)
       @values = Gmail::Message.get(response[:id]).values
+      self
     end
 
     def reply_all_with msg
@@ -50,7 +51,9 @@ module Gmail
       msg.from = from
       msg.to   = to
       msg.cc = cc
-      msg.bcc = bcc
+      msg.header['Bcc'] = bcc
+      msg.header['In-Reply-To'] = in_reply_to
+      msg.header['References'] = references
       if text
         msg.text_part = Mail::Part.new do |p|
           p.body s.text
@@ -68,9 +71,9 @@ module Gmail
 
     def set_basics
       if @values.payload
-        ["From", "To", "Cc", "Subject", "Bcc"].each do |n|
+        ["From", "To", "Cc", "Subject", "Bcc", "Date", "Message-ID", "References", "In-Reply-To"].each do |n|
           if @values.payload.headers.select{|h| h.name == n}.first
-            @values.send(n.downcase + "=", @values.payload.headers.select{|h| h.name == n}.first.value)
+            @values.send(n.downcase.tr("-", "_") + "=", @values.payload.headers.select{|h| h.name == n}.first.value)
           end
         end
 
@@ -82,6 +85,18 @@ module Gmail
           @values.body = urlsafe_decode64(@values.payload.body.data)
         end
       end
+    end
+
+    def unread?
+      labelIds.include?("UNREAD")
+    end
+
+    def sent?
+      labelIds.include?("SENT")
+    end
+
+    def inbox?
+      labelIds.include?("INBOX")
     end
 
 
@@ -103,6 +118,8 @@ module Gmail
       msg.to = from
       msg.cc = cc
       msg.threadId = thread_id
+      msg.references = (references || "") + " " + message_id
+      msg.in_reply_to = (in_reply_to || "") + " " + message_id
       msg
     end
 

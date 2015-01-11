@@ -27,7 +27,11 @@ module Gmail
     end
 
     def unread_messages
-      Gmail::Message.all({labelIds: [id, "UNREAD"]})
+      if messagesUnread == 0
+        []
+      else
+        Gmail::Message.all({labelIds: [id, "UNREAD"]})
+      end
     end
 
     def threads filters={}
