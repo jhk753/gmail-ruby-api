@@ -36,6 +36,23 @@ module Gmail
       msg.deliver
     end
 
+    def forward_with msg
+      # save headers that need to be override by users compared to a classic reply
+      x_cc = msg.cc
+      x_to = msg.to
+      x_bcc = msg.bcc
+      x_subject = msg.subject || subject #if user doesn't override keep classic behavior
+      # set headers as for reply
+      msg = set_headers_for_reply msg
+      # reset saved overridden headers
+      msg.cc = x_cc
+      msg.to = x_to
+      msg.bcc = x_bcc
+      msg.subject = x_subject
+      #send message
+      msg.deliver
+    end
+
 
     def thread_id
       threadId
@@ -51,7 +68,7 @@ module Gmail
       msg.from = from
       msg.to   = to
       msg.cc = cc
-      msg.header['X-Bcc'] = bcc #because Mail gem doesn't allow bcc headers...
+      msg.header['X-Bcc'] = bcc unless bcc.nil?#because Mail gem doesn't allow bcc headers...
       msg.header['In-Reply-To'] = in_reply_to
       msg.header['References'] = references
       if text
@@ -117,6 +134,7 @@ module Gmail
       msg.subject = subject
       msg.to = from
       msg.cc = cc
+      msg.bcc = nil
       msg.threadId = thread_id
       msg.references = (references || "") + " " + message_id
       msg.in_reply_to = (in_reply_to || "") + " " + message_id
