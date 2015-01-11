@@ -51,7 +51,7 @@ module Gmail
       msg.from = from
       msg.to   = to
       msg.cc = cc
-      msg.header['Bcc'] = bcc
+      msg.header['X-Bcc'] = bcc #because Mail gem doesn't allow bcc headers...
       msg.header['In-Reply-To'] = in_reply_to
       msg.header['References'] = references
       if text
@@ -66,7 +66,7 @@ module Gmail
         end
       end
 
-      Base64.urlsafe_encode64 msg.to_s
+      Base64.urlsafe_encode64 msg.to_s.sub("X-Bcc", "Bcc") #because Mail gem doesn't allow bcc headers...
     end
 
     def set_basics

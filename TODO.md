@@ -1,6 +1,5 @@
 # TODO
 
-*bcc is not working
-*Set reply to message properly
-*build high-level methods as reply, forward, search, etc
+*Quote previous messages in reply and forward
+*build convenient methods search by from, date, etc
 *write test
