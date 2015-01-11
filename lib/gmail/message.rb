@@ -58,51 +58,6 @@ module Gmail
       threadId
     end
 
-    def raw
-      s = self
-      msg = Mail.new
-      msg.subject = subject
-      if body
-        msg.body = body
-      end
-      msg.from = from
-      msg.to   = to
-      msg.cc = cc
-      msg.header['X-Bcc'] = bcc unless bcc.nil?#because Mail gem doesn't allow bcc headers...
-      msg.header['In-Reply-To'] = in_reply_to
-      msg.header['References'] = references
-      if text
-        msg.text_part = Mail::Part.new do |p|
-          p.body s.text
-        end
-      end
-      if html
-        msg.html_part = Mail::Part.new do |p|
-          content_type 'text/html; charset=UTF-8'
-          p.body s.html
-        end
-      end
-
-      Base64.urlsafe_encode64 msg.to_s.sub("X-Bcc", "Bcc") #because Mail gem doesn't allow bcc headers...
-    end
-
-    def set_basics
-      if @values.payload
-        ["From", "To", "Cc", "Subject", "Bcc", "Date", "Message-ID", "References", "In-Reply-To"].each do |n|
-          if @values.payload.headers.select{|h| h.name == n}.first
-            @values.send(n.downcase.tr("-", "_") + "=", @values.payload.headers.select{|h| h.name == n}.first.value)
-          end
-        end
-
-        if payload.parts
-          @values.text = urlsafe_decode64(@values.payload.parts.select{|h| h.mimeType=="text/plain"}.first.body.data)
-          @values.html = urlsafe_decode64(@values.payload.parts.select{|h| h.mimeType=="text/html"}.first.body.data)
-        end
-        if payload.body.data
-          @values.body = urlsafe_decode64(@values.payload.body.data)
-        end
-      end
-    end
 
     def unread?
       labelIds.include?("UNREAD")
@@ -146,6 +101,55 @@ module Gmail
 
 
     end
+
+
+    def set_basics
+      if @values.payload
+        ["From", "To", "Cc", "Subject", "Bcc", "Date", "Message-ID", "References", "In-Reply-To"].each do |n|
+          if @values.payload.headers.select{|h| h.name == n}.first
+            @values.send(n.downcase.tr("-", "_") + "=", @values.payload.headers.select{|h| h.name == n}.first.value)
+          end
+        end
+
+        if payload.parts
+          @values.text = urlsafe_decode64(@values.payload.parts.select{|h| h.mimeType=="text/plain"}.first.body.data)
+          @values.html = urlsafe_decode64(@values.payload.parts.select{|h| h.mimeType=="text/html"}.first.body.data)
+        end
+        if payload.body.data
+          @values.body = urlsafe_decode64(@values.payload.body.data)
+        end
+      end
+    end
+
+
+    def raw
+      s = self
+      msg = Mail.new
+      msg.subject = subject
+      if body
+        msg.body = body
+      end
+      msg.from = from
+      msg.to   = to
+      msg.cc = cc
+      msg.header['X-Bcc'] = bcc unless bcc.nil?#because Mail gem doesn't allow bcc headers...
+      msg.header['In-Reply-To'] = in_reply_to
+      msg.header['References'] = references
+      if text
+        msg.text_part = Mail::Part.new do |p|
+          p.body s.text
+        end
+      end
+      if html
+        msg.html_part = Mail::Part.new do |p|
+          content_type 'text/html; charset=UTF-8'
+          p.body s.html
+        end
+      end
+
+      Base64.urlsafe_encode64 msg.to_s.sub("X-Bcc", "Bcc") #because Mail gem doesn't allow bcc headers...
+    end
+
 
 
   end
