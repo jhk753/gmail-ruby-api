@@ -1,4 +1,5 @@
 # TODO
 
-*build methods for labels, thread and messages
+*bcc is not working
 *build high-level methods as reply, forward, search, etc
+*test

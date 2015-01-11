@@ -22,6 +22,20 @@ module Gmail
       @values = Gmail::Message.get(response[:id]).values
     end
 
+    def reply_all_with msg
+      msg = set_headers_for_reply msg
+      #msg = set_body_for_reply msg
+      msg.deliver
+    end
+
+    def reply_sender_with msg
+      msg = set_headers_for_reply msg
+     # msg = set_body_for_reply msg
+      msg.cc = nil
+      msg.deliver
+    end
+
+
     def thread_id
       threadId
     end
@@ -61,11 +75,11 @@ module Gmail
         end
 
         if payload.parts
-          @values.text = Base64.urlsafe_decode64 @values.payload.parts.select{|h| h.mimeType=="text/plain"}.first.body.data
-          @values.html = Base64.urlsafe_decode64 @values.payload.parts.select{|h| h.mimeType=="text/html"}.first.body.data
+          @values.text = urlsafe_decode64(@values.payload.parts.select{|h| h.mimeType=="text/plain"}.first.body.data)
+          @values.html = urlsafe_decode64(@values.payload.parts.select{|h| h.mimeType=="text/html"}.first.body.data)
         end
         if payload.body.data
-          @values.body = Base64.urlsafe_decode64 @values.payload.body.data
+          @values.body = urlsafe_decode64(@values.payload.body.data)
         end
       end
     end
@@ -82,6 +96,20 @@ module Gmail
         msg[:labelIds] = labelIds
       end
       msg
+    end
+
+    def set_headers_for_reply msg
+      msg.subject = subject
+      msg.to = from
+      msg.cc = cc
+      msg.threadId = thread_id
+      msg
+    end
+
+    def urlsafe_decode64 code
+      Base64.urlsafe_decode64(code).force_encoding('UTF-8').encode
+
+
     end
 
 
