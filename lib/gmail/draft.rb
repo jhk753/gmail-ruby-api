@@ -4,6 +4,7 @@ module Gmail
     include Gmail::Base::Create
     include Gmail::Base::Delete
     include Gmail::Base::Get
+    include Gmail::Base::Update
 
     def message
 
@@ -22,8 +23,7 @@ module Gmail
         msg[:labelIds] = message.labelIds
       end
       body = {message: msg}
-      Gmail.request(self.class.base_method.send("update"),{id: id}, body)
-      self
+      update(body)
     end
 
     def deliver

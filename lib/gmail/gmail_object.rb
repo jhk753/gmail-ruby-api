@@ -31,14 +31,6 @@ module Gmail
       @values.send("#{k}=", v)
     end
 
-    def keys
-      @values.keys
-    end
-
-    def values
-      @values.values
-    end
-
     def to_json(*a)
       JSON.generate(@values)
     end
@@ -53,6 +45,10 @@ module Gmail
     #
     def to_hash
       @values.to_hash
+    end
+
+    def values
+      @values
     end
     #
     # def each(&blk)

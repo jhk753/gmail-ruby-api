@@ -11,6 +11,9 @@ require 'gmail/base/create'
 require 'gmail/base/delete'
 require 'gmail/base/get'
 require 'gmail/base/list'
+require 'gmail/base/update'
+require 'gmail/base/modify'
+require 'gmail/base/trash'
 
 #object
 require 'gmail/util'

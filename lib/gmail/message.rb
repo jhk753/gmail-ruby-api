@@ -4,6 +4,8 @@ module Gmail
     include Gmail::Base::Create
     include Gmail::Base::Delete
     include Gmail::Base::Get
+    include Gmail::Base::Modify
+    include Gmail::Base::Trash
 
     after_initialize :set_basics
 
