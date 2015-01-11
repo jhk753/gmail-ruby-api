@@ -25,13 +25,13 @@ module Gmail
 
     def reply_all_with msg
       msg = set_headers_for_reply msg
-      #msg = set_body_for_reply msg
+      msg = quote_in msg
       msg.deliver
     end
 
     def reply_sender_with msg
       msg = set_headers_for_reply msg
-     # msg = set_body_for_reply msg
+      msg = quote_in msg
       msg.cc = nil
       msg.deliver
     end
@@ -44,6 +44,8 @@ module Gmail
       x_subject = msg.subject || subject #if user doesn't override keep classic behavior
       # set headers as for reply
       msg = set_headers_for_reply msg
+      # quote message
+      msg = quote_in msg
       # reset saved overridden headers
       msg.cc = x_cc
       msg.to = x_to
@@ -96,10 +98,17 @@ module Gmail
       msg
     end
 
+    def quote_in reply_msg
+      text_to_append = "\n\n#{date} #{from}:\n\n>" + (body || text).gsub("\n", "\n>")
+      html_to_append = "\r\n<br><br><div class=\"gmail_quote\"> #{date} #{CGI.escapeHTML(from)}:<br><blockquote class=\"gmail_quote\" style=\"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex\">" + html + "</blockquote></div><br>"
+      reply_msg.html = "<div>" + reply_msg.html + "</div>" + html_to_append unless reply_msg.html.nil?
+      reply_msg.text = reply_msg.text + text_to_append unless reply_msg.text.nil?
+      reply_msg.body = reply_msg.body + text_to_append unless reply_msg.body.nil?
+      reply_msg
+    end
+
     def urlsafe_decode64 code
       Base64.urlsafe_decode64(code).force_encoding('UTF-8').encode
-
-
     end
 
 
@@ -133,8 +142,8 @@ module Gmail
       msg.to   = to
       msg.cc = cc
       msg.header['X-Bcc'] = bcc unless bcc.nil?#because Mail gem doesn't allow bcc headers...
-      msg.header['In-Reply-To'] = in_reply_to
-      msg.header['References'] = references
+      msg.header['In-Reply-To'] = in_reply_to  unless in_reply_to.nil?
+      msg.header['References'] = references unless references.nil?
       if text
         msg.text_part = Mail::Part.new do |p|
           p.body s.text
