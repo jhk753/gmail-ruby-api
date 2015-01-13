@@ -29,15 +29,19 @@ module Gmail
             query = ""
             [:from, :to, :subject].each do |prop|
               query += "#{prop.to_s}:(#{q[prop].downcase}) "  unless q[prop].nil?
+              q.delete(prop)
             end
             [:in, :before, :after].each do |prop|
               query += "#{prop.to_s}:#{q[prop]} " unless q[prop].nil?
+              q.delete(prop)
             end
 
             query += "#{q[:has_words]} " unless q[:has_words].nil?
             query += "-{#{q[:has_not_words]}}" unless q[:has_not_words].nil?
-            p "searching with this string #{query}"
-            all(q: query)
+            q.delete(:has_words)
+            q.delete(:has_not_words)
+
+            all(q.merge({q: query}))
           end
         end
       end

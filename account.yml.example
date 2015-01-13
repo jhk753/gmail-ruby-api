@@ -1,0 +1,5 @@
+client_id: example
+client_secret: example
+refresh_token: example
+application_name: example
+application_version: 1.0.0

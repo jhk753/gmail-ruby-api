@@ -23,12 +23,10 @@ pkg
 Gemfile.lock
 
 ## Gem build
-.gem
+*.gem
 
 ## PROJECT::SPECIFIC
 *.rdb
 
 ## Test Account details
-spec/account.yml
-env.yml
-spec/
+account.yml

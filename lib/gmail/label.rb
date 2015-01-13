@@ -7,11 +7,11 @@ module Gmail
     include Gmail::Base::Update
 
     def save
-      update(@values.to_hash)
+      update(to_hash)
     end
 
     def save!
-      update!(@values.to_hash)
+      update!(to_hash)
     end
 
     def self.boxes

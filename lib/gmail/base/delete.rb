@@ -4,7 +4,9 @@ module Gmail
       def delete(opts={})
         response = Gmail.request(self.class.base_method.send("delete"),{id: id})
         if response == ""
-          p "Success"
+          true
+        else
+          false
         end
       end
 
@@ -12,7 +14,9 @@ module Gmail
         def delete(id, opts={})
          response = Gmail.request(base_method.send("delete"),{id: id})
          if response == ""
-           p "Success"
+           true
+         else
+           false
          end
         end
       end

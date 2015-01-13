@@ -1,6 +1,4 @@
 require 'mail'
-require 'date'
-require 'time'
 require 'hashie'
 require 'hooks'
 require 'google/api_client'
@@ -25,16 +23,24 @@ require 'gmail/label'
 
 
 module Gmail
-  begin
-    @client_id ||= YAML.load_file("env.yml")["GOOGLE_CLIENT_ID"]
-    @client_secret ||= YAML.load_file("env.yml")["GOOGLE_CLIENT_SECRET"]
-    @refresh_token ||= YAML.load_file("env.yml")["GOOGLE_REFRESH_TOKEN"]
-  rescue
-
-  end
 
   class << self
-    attr_accessor :client_id, :client_secret, :refresh_token, :client, :service
+    attr_accessor :client_id, :client_secret, :refresh_token, :client, :service, :application_name, :application_version
+    def new hash
+      [:client_id, :client_secret, :refresh_token, :application_name, :application_version].each do |accessor|
+        Gmail.send("#{accessor}=", hash[accessor.to_s])
+      end
+    end
+  end
+
+  Google::APIClient.logger.level = 3
+  @service = Google::APIClient.new.discovered_api('gmail', 'v1')
+  Google::APIClient.logger.level = 2
+
+  begin
+    Gmail.new  YAML.load_file("account.yml")  # for development purpose
+  rescue
+
   end
 
   def self.request(method, params={}, body={})
@@ -74,23 +80,23 @@ module Gmail
     end
 
     @client = Google::APIClient.new(
-        application_name: 'Juliedesk',
-        application_version: '1.0.0'
+        application_name: @application_name,
+        application_version: @application_version
     )
     @client.authorization.client_id = client_id
     @client.authorization.client_secret = client_secret
     @client.authorization.refresh_token = refresh_token
     @client.authorization.grant_type = 'refresh_token'
     @client.authorization.fetch_access_token!
+    @client.auto_refresh_token = true
 
-    @service = @client.discovered_api('gmail', 'v1')
+    #@service = @client.discovered_api('gmail', 'v1')
 
   end
 
   def self.parse(response)
     begin
-      # Would use :symbolize_names => true, but apparently there is
-      # some library out there that makes symbolize_names not work.
+
       if response.body.empty?
         return response.body
       else

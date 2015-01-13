@@ -10,7 +10,12 @@ module Gmail
       if @values.message.is_a?(Gmail::Message)
         @values.message
       else
-        @values.message = Util.convert_to_gmail_object(to_hash["message"], key="message").detailed
+        @values.message = Util.convert_to_gmail_object(to_hash[:message], key="message")
+        if @values.message.payload.nil?
+          self.detailed!
+          message
+        end
+        @values.message
       end
     end
 
