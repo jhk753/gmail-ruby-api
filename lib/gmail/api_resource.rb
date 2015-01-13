@@ -5,7 +5,6 @@ module Gmail
     end
 
     def self.base_method
-      Gmail.connect
       Gmail.service.users.send("#{class_name.downcase}s")
     end
 

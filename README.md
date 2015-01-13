@@ -15,8 +15,7 @@ If for your usecase, the gem is too limited there are two solutions for you:
 
 # To Do
 
-Write test
-write proper error handling
+* write proper error handling
 
 ## Installation
 
@@ -58,10 +57,11 @@ this will work for Messages and Threads
    some_message.un_star
    some_message.mark_as_read
    some_message.mark_as_unread
-
+   
    Gmail::Message.search(in: "labelId" from: "me@gmail.com", to: "you@gmail.com, theothers@gmail.com", subject: "some subject", after: "date", before: "date", has_words: "some words", has_not_words: "some text")
    Gmail::Message.search("some words") #search as you would do in gmail interface
-```
+ 
+ ```
 
 
 ### Message

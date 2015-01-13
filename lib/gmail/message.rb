@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Gmail
   class Message < APIResource
     include Gmail::Base::List
@@ -93,10 +94,11 @@ module Gmail
         msg.to   = to
         msg.cc = cc
         msg.header['X-Bcc'] = bcc unless bcc.nil?#because Mail gem doesn't allow bcc headers...
-        msg.header['In-Reply-To'] = in_reply_to  unless in_reply_to.nil?
-        msg.header['References'] = references unless references.nil?
+        msg.in_reply_to = in_reply_to  unless in_reply_to.nil?
+        msg.references = references unless references.nil?
         if text
           msg.text_part = Mail::Part.new do |p|
+            content_type 'text/plain; charset=UTF-8'
             p.body s.text
           end
         end
@@ -106,7 +108,6 @@ module Gmail
             p.body s.html
           end
         end
-
         Base64.urlsafe_encode64 msg.to_s.sub("X-Bcc", "Bcc") #because Mail gem doesn't allow bcc headers...
       end
     end
@@ -171,11 +172,11 @@ module Gmail
         end
 
         if payload.parts
-          text_part=@values.payload.parts.select{|h| h.mimeType=="text/plain"}.first
+          text_part=@values.payload.find_all_object_containing("mimeType", "text/plain").first
           if text_part
             @values.text = urlsafe_decode64(text_part.body.data)
           end
-          html_part=@values.payload.parts.select{|h| h.mimeType=="text/html"}.first
+          html_part=@values.payload.find_all_object_containing("mimeType", "text/html").first
           if html_part
             @values.html = urlsafe_decode64(html_part.body.data)
           end
@@ -185,5 +186,22 @@ module Gmail
         end
       end
     end
+
+    class Hashie::Mash
+      def find_all_object_containing(key, value )
+        result=[]
+        if self.send(key) == value
+          result << self
+        end
+        self.values.each do |vs|
+          vs = [vs] unless vs.is_a? Array
+          vs.each do |v|
+            result += v.find_all_object_containing(key,value) if v.is_a? Hashie::Mash
+          end
+        end
+        result
+      end
+    end
+
   end
 end

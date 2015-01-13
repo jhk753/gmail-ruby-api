@@ -23,13 +23,10 @@ end
 
 Bundler::GemHelper.install_tasks
 
-begin
-  require 'rspec/core/rake_task'
-  RSpec::Core::RakeTask.new(:spec)
-rescue LoadError
-  task :spec do
-    abort 'Run `gem install rspec` to install RSpec'
-  end
-end
+require 'rake/testtask'
 
-task :default => :spec
+task :default => [:test]
+
+Rake::TestTask.new do |t|
+  t.pattern = './test/**/*_test.rb'
+end

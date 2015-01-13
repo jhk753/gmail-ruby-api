@@ -40,16 +40,25 @@ module Gmail
     end
 
     def detailed
+      if self.class == Gmail::GmailObject
+        raise "Can't detail a generic GmailObject. It needs to be a Thread, Message, Draft or Label"
+      end
+
       self.class.get(id)
     end
 
-    def detailed!
+    def refresh
+      if self.class == Gmail::GmailObject
+        raise "Can't refresh a generic GmailObject. It needs to be a Thread, Message, Draft or Label"
+      end
       @values = self.class.get(id).values
       self
     end
+
+    alias_method :detailed!, :refresh
     #
     def to_hash
-      @values.to_hash
+      Util.symbolize_names(@values.to_hash)
     end
 
     def values
