@@ -5,10 +5,10 @@ require 'gmail/version'
 
 Gem::Specification.new do |s|
   s.name = "gmail-api-ruby"
-  s.summary = "A Rubyesque interface to Gmail API (NO IMAP, NO SMTP), with all the tools you will need."
-  s.description = "A Rubyesque interface to Gmail, with all the tools you will need.
+  s.summary = "A Ruby interface to Gmail API (NO IMAP, NO SMTP), with all the tools you will need."
+  s.description = "A Ruby interface to Gmail API (NO IMAP, NO SMTP).
   Search, read and send multipart emails; archive, mark as read/unread,
-  delete emails; and manage labels.
+  delete emails; and manage labels. Everything is done through the Gmail API without going through IMAP or SMTP Protocol
   "
   s.version = Gmail::VERSION
   s.platform = Gem::Platform::RUBY
