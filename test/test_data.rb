@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module Gmail
   module TestData
     def test_response(body, code=200)
@@ -12,88 +13,7 @@ module Gmail
     end
 
     def test_draft(params={})
-      {
-        "id": "1490204870554280932",
-        "message": {
-          "id": "14ae456f2ff1e3e4",
-          "threadId": "14ae456f2ff1e3e4",
-          "labelIds": [
-          "DRAFT"
-           ],
-          "snippet": "sd Cordialement, Julie",
-          "historyId": "227960",
-          "payload": {
-            "mimeType": "multipart/alternative",
-            "filename": "",
-            "headers": [
-              {
-                "name": "MIME-Version",
-                "value": "1.0"
-              },
-              {
-                "name": "Received",
-                "value": "by 10.64.21.4 with HTTP; Tue, 13 Jan 2015 09:28:31 -0800 (PST)"
-              },
-              {
-                "name": "Date",
-                "value": "Tue, 13 Jan 2015 18:28:31 +0100"
-              },
-              {
-                "name": "Message-ID",
-                "value": "<CAFXNVWSNjE652y4nau3nbWeoJ7RD_UsybHWa9-L6vvRi9j3nFQ@mail.gmail.com>"
-              },
-              {
-                "name": "Subject",
-                "value": ""
-              },
-              {
-                "name": "From",
-                "value": "Julie Desk <julie@juliedesk.com>"
-              },
-              {
-                "name": "Content-Type",
-                "value": "multipart/alternative; boundary=f46d042abf34a36bd9050c8bf335"
-              }
-            ],
-            "body": {
-              "size": 0
-            },
-            "parts": [
-              {
-                "partId": "0",
-                "mimeType": "text/plain",
-                "filename": "",
-                "headers": [
-                  {
-                    "name": "Content-Type",
-                    "value": "text/plain; charset=UTF-8"
-                  }
-                ],
-                "body": {
-                  "size": 28,
-                  "data": "c2QNCkNvcmRpYWxlbWVudCwNCg0KSnVsaWUNCg=="
-                }
-              },
-              {
-                "partId": "1",
-                "mimeType": "text/html",
-                "filename": "",
-                "headers": [
-                  {
-                    "name": "Content-Type",
-                    "value": "text/html; charset=UTF-8"
-                  }
-                ],
-                "body": {
-                  "size": 154,
-                  "data": "PGRpdiBkaXI9Imx0ciI-c2Q8YnIgY2xlYXI9ImFsbCI-PGRpdj48ZGl2IGNsYXNzPSJnbWFpbF9zaWduYXR1cmUiPjxkaXYgZGlyPSJsdHIiPkNvcmRpYWxlbWVudCw8ZGl2Pjxicj48L2Rpdj48ZGl2Pkp1bGllPC9kaXY-PC9kaXY-PC9kaXY-PC9kaXY-DQo8L2Rpdj4NCg=="
-                }
-              }
-            ]
-          },
-          "sizeEstimate": 710
-        }
-    }.merge(params)
+      {:id=>"1490204870554280932", :message=>{:id=>"14ae456f2ff1e3e4", :threadId=>"14ae456f2ff1e3e4", :labelIds=>["DRAFT"], :snippet=>"sd Cordialement, Julie", :historyId=>"227960", :payload=>{:mimeType=>"multipart/alternative", :filename=>"", :headers=>[{:name=>"MIME-Version", :value=>"1.0"}, {:name=>"Received", :value=>"by 10.64.21.4 with HTTP; Tue, 13 Jan 2015 09:28:31 -0800 (PST)"}, {:name=>"Date", :value=>"Tue, 13 Jan 2015 18:28:31 +0100"}, {:name=>"Message-ID", :value=>"<CAFXNVWSNjE652y4nau3nbWeoJ7RD_UsybHWa9-L6vvRi9j3nFQ@mail.gmail.com>"}, {:name=>"Subject", :value=>""}, {:name=>"From", :value=>"Julie Desk <julie@juliedesk.com>"}, {:name=>"Content-Type", :value=>"multipart/alternative; boundary=f46d042abf34a36bd9050c8bf335"}], :body=>{:size=>0}, :parts=>[{:partId=>"0", :mimeType=>"text/plain", :filename=>"", :headers=>[{:name=>"Content-Type", :value=>"text/plain; charset=UTF-8"}], :body=>{:size=>28, :data=>"c2QNCkNvcmRpYWxlbWVudCwNCg0KSnVsaWUNCg=="}}, {:partId=>"1", :mimeType=>"text/html", :filename=>"", :headers=>[{:name=>"Content-Type", :value=>"text/html; charset=UTF-8"}], :body=>{:size=>154, :data=>"PGRpdiBkaXI9Imx0ciI-c2Q8YnIgY2xlYXI9ImFsbCI-PGRpdj48ZGl2IGNsYXNzPSJnbWFpbF9zaWduYXR1cmUiPjxkaXYgZGlyPSJsdHIiPkNvcmRpYWxlbWVudCw8ZGl2Pjxicj48L2Rpdj48ZGl2Pkp1bGllPC9kaXY-PC9kaXY-PC9kaXY-PC9kaXY-DQo8L2Rpdj4NCg=="}}]}, :sizeEstimate=>710}} .merge(params)
 
     end
 
