@@ -231,35 +231,87 @@ module Gmail
     end
 
 
-    should "Reply to sender should be easy" do
+    should "Reply to sender contruct should be easy" do
       m = Gmail::Message.new test_to_reply_message
       reply_message = Gmail::Message.new test_reply_message
-      @mock.expects(:execute).once.returns(test_response(test_replied_message))
-      @mock.expects(:execute).with(api_method: Gmail.service.users.messages.get, parameters: {userId: "me", id: test_replied_message[:id]}, headers: {'Content-Type' => 'application/json'}).once.returns(test_response(test_replied_message))
-
+      @mock.expects(:execute).never
+      expected_msg = Gmail::Message.new test_replied_message
       new_m = m.reply_sender_with reply_message
-      # to be completed to be fully tested
+
+      assert_equal expected_msg.to, new_m.to
+      assert_nil new_m.cc
+      assert_nil new_m.bcc
+      assert_equal expected_msg.subject, new_m.subject
+      assert_equal expected_msg.references, new_m.references
+      assert_equal expected_msg.in_reply_to, new_m.in_reply_to
+      assert_equal expected_msg.thread_id, new_m.thread_id
+      assert_equal expected_msg.body, new_m.body
+      assert_nil new_m.html
+      assert_nil new_m.text
+
+      new_m = m.reply_sender_with(Gmail::Message.new test_reply_message_with_html)
+      expected_msg = Gmail::Message.new(test_replied_message_with_html)
+
+      assert_equal expected_msg.text, new_m.text
+      assert_equal expected_msg.html, new_m.html
+      assert_nil new_m.body
 
     end
 
-    should "Reply to all should be easy" do
+    should "Reply to all construct should be easy" do
       m = Gmail::Message.new test_to_reply_message
       reply_message = Gmail::Message.new test_reply_message
-      @mock.expects(:execute).once.returns(test_response(test_replied_message))
-      @mock.expects(:execute).with(api_method: Gmail.service.users.messages.get, parameters: {userId: "me", id: test_replied_message[:id]}, headers: {'Content-Type' => 'application/json'}).once.returns(test_response(test_replied_message))
-
+      @mock.expects(:execute).never
       new_m = m.reply_all_with reply_message
-      # to be completed to be fully tested
+      expected_msg = Gmail::Message.new test_replied_message
+
+      assert_equal expected_msg.to, new_m.to
+      assert_equal expected_msg.cc, new_m.cc
+      assert_nil new_m.bcc
+      assert_equal expected_msg.subject, new_m.subject
+      assert_equal expected_msg.references, new_m.references
+      assert_equal expected_msg.in_reply_to, new_m.in_reply_to
+      assert_equal expected_msg.thread_id, new_m.thread_id
+      assert_equal expected_msg.body, new_m.body
+      assert_nil new_m.html
+      assert_nil new_m.text
+
+      new_m = m.reply_all_with(Gmail::Message.new test_reply_message_with_html)
+      expected_msg = Gmail::Message.new(test_replied_message_with_html)
+
+      assert_equal expected_msg.text, new_m.text
+      assert_equal expected_msg.html, new_m.html
+      assert_nil new_m.body
+
+
     end
 
-    should "forward should be easy" do
+    should "forward construct should be easy" do
       m = Gmail::Message.new test_to_reply_message
-      forward_message = Gmail::Message.new test_reply_message(to: "test@test.com", bbc: "coucou", cc: "test@couocu.com, second@second.com", subject: "cool subject", body: "test")
-      @mock.expects(:execute).once.returns(test_response(test_replied_message))
-      @mock.expects(:execute).with(api_method: Gmail.service.users.messages.get, parameters: {userId: "me", id: test_replied_message[:id]}, headers: {'Content-Type' => 'application/json'}).once.returns(test_response(test_replied_message))
-
+      forward_message = Gmail::Message.new(test_forward_message)
+      @mock.expects(:execute).never
       new_m = m.forward_with forward_message
+      expected_msg = Gmail::Message.new test_forwarded_message
       # to be completed to be fully tested
+
+      assert_equal expected_msg.to, new_m.to
+      assert_equal expected_msg.cc, new_m.cc
+      assert_nil new_m.bcc
+      assert_equal expected_msg.subject, new_m.subject
+      assert_equal expected_msg.references, new_m.references
+      assert_equal expected_msg.in_reply_to, new_m.in_reply_to
+      assert_equal expected_msg.thread_id, new_m.thread_id
+      assert_equal expected_msg.body, new_m.body
+      assert_nil new_m.html
+      assert_nil new_m.text
+
+      forward_message = Gmail::Message.new({to: "test@test.com", bbc: "coucou", cc: "test@couocu.com, second@second.com", subject: "cool subject", html: "<b>test</b>", text: "test"})
+      new_m = m.forward_with forward_message
+      expected_msg = Gmail::Message.new test_forwarded_message_with_html
+
+      assert_equal expected_msg.text, new_m.text
+      assert_equal expected_msg.html, new_m.html
+      assert_nil new_m.body
     end
 
   end

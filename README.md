@@ -127,13 +127,16 @@ In that scenario, you still assign, if needed, ThreadId and labelIds as previous
 If you want to quickly generate a reply or a forward to message
 
 ```ruby
-    # this will handle everything for you, keeping the subject the thread etc as it would happen in Gmail
+    # this will construct everything for you, keeping the subject the thread etc as it would happen in Gmail
       # reply only to the sender of Message m.
-        m.reply_sender_with Gmail::Message.new(body: "some reply text")
+        msg = m.reply_sender_with Gmail::Message.new(body: "some reply text")
       # reply to all (sender, to (without yourself) and cc)
-        m.reply_all_with Gmail::Message.new(body: "some reply text")
+        msg = m.reply_all_with Gmail::Message.new(body: "some reply text")
       # forward
-        m.forward_with Gmail::Message.new(body: "some forward text", to: "address@toforward.com")
+        msg = m.forward_with Gmail::Message.new(body: "some forward text", to: "address@toforward.com")
+    # Note that the above will not send the resulting msg
+        msg.deliver #to send the constructed reply message
+        
 ```
 
 Other stuffs that you can do with Message object
