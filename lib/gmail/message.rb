@@ -31,14 +31,14 @@ module Gmail
     def reply_all_with msg
       msg = set_headers_for_reply msg
       msg = quote_in msg
-      msg.deliver
+      msg
     end
 
     def reply_sender_with msg
       msg = set_headers_for_reply msg
       msg = quote_in msg
       msg.cc = nil
-      msg.deliver
+      msg
     end
 
     def forward_with msg
@@ -56,8 +56,7 @@ module Gmail
       msg.to = x_to
       msg.bcc = x_bcc
       msg.subject = x_subject
-      #send message
-      msg.deliver
+      msg
     end
 
 
@@ -127,30 +126,30 @@ module Gmail
 
     def set_headers_for_reply msg
       to_ar = []
+      split_regexp = Regexp.new "\s*,\s*"
       if delivered_to
-        to_ar = to.split(",")
+        to_ar = to.split(split_regexp)
         result = to_ar.grep(Regexp.new delivered_to)
         if result
-          to_ar.delete(result)
+          to_ar = to_ar - result
         end
       end
-
       msg.subject = subject
       msg.to = from
       if cc.nil?
         msg.cc = to_ar.join(", ")
       else
-        msg.cc = to_ar.join(", ")+", "+ cc
+        msg.cc = (to_ar + cc.split(split_regexp)).join(", ")
       end
       msg.bcc = nil
       msg.threadId = thread_id
-      msg.references = (references || "") + " " + message_id
-      msg.in_reply_to = (in_reply_to || "") + " " + message_id
+      msg.references = ((references || "").split(Regexp.new "\s+") <<  message_id).join(" ")
+      msg.in_reply_to = ((in_reply_to || "").split(Regexp.new "\s+") << message_id).join(" ")
       msg
     end
 
     def quote_in reply_msg
-      text_to_append = "\n\n#{date} #{from}:\n\n>" + (body || text).gsub("\n", "\n>")  unless body.nil? && text.nil?
+      text_to_append = "\r\n\r\n#{date} #{from}:\r\n\r\n>" + (body || text).gsub("\n", "\n>")  unless body.nil? && text.nil?
       html_to_append = "\r\n<br><br><div class=\"gmail_quote\"> #{date} #{CGI.escapeHTML(from)}:<br><blockquote class=\"gmail_quote\" style=\"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex\">" + html + "</blockquote></div><br>" unless html.nil?
       reply_msg.html = "<div>" + reply_msg.html + "</div>" + html_to_append unless reply_msg.html.nil?
       reply_msg.text = reply_msg.text + text_to_append unless reply_msg.text.nil?
