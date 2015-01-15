@@ -11,3 +11,7 @@
 
 * No change, only gem description
 
+## 0.0.5 / 2015-01-15
+
+* updated dependencies
+
