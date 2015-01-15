@@ -27,19 +27,13 @@ module Gmail
 
     end
 
-    should "not recursively call to_hash on GmailObject" do
+    should "recursively call to_hash on GmailObject" do
       nested = Gmail::GmailObject.new({ :id => 7, :foo => 'bar' })
-      obj = Gmail::GmailObject.new({ :id => 1, :nested => nested })
-      expected_hash = { :id => 1, :nested => nested }
+      obj = Gmail::GmailObject.new({ :id => 1})
+      obj.nested = nested
+      expected_hash = { :id => 1, :nested => {:id => 7, :foo => 'bar'} }
       assert_equal expected_hash, obj.to_hash
     end
 
-    should "recursively call to_hash on its value" do
-      nested = { :id => 7, :foo => 'bar' }
-      obj = Gmail::GmailObject.new({ :id => 1, :nested => nested })
-      expected_hash = { :id => 1, :nested => nested }
-      assert_equal 7, obj.nested.id
-      assert_equal expected_hash, obj.to_hash
-    end
   end
 end

@@ -6,6 +6,8 @@ and manage labels. Everything goes through Gmail API (and not through IMAP or SM
 
 [![Gem Version](https://badge.fury.io/rb/gmail-api-ruby.svg)](http://badge.fury.io/rb/gmail-api-ruby)
 [![Build Status](https://travis-ci.org/jhk753/gmail-ruby-api.svg)](https://travis-ci.org/jhk753/gmail-ruby-api)
+[![Dependency Status](https://gemnasium.com/jhk753/gmail-ruby-api.svg)](https://gemnasium.com/jhk753/gmail-ruby-api)
+
 
 # Notice
 

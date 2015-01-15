@@ -16,17 +16,18 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/jhk753/gmail-ruby-api"
   
   # runtime dependencies
+  s.required_ruby_version = '>= 1.9.3'
   s.add_dependency "mime", ">= 0.1"
   s.add_dependency "mail", ">= 2.2.1"
   s.add_dependency 'google-api-client'
-  s.add_dependency "hooks"
-  s.add_dependency "hashie"
+  s.add_dependency "hooks", ">=0.4.0"
+  s.add_dependency "hashie", ">=3.3.2"
   
   # development dependencies
   s.add_development_dependency "rake"
   s.add_development_dependency "test-unit"
-  s.add_development_dependency('mocha', '~> 0.13.2')
-  s.add_development_dependency('shoulda', '~> 3.4.0')
+  s.add_development_dependency('mocha', '~> 1.0.0')
+  s.add_development_dependency('shoulda', '~> 3.5.0')
   s.add_development_dependency "gem-release"
   
   s.files         = `git ls-files`.split("\n")

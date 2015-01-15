@@ -40,7 +40,7 @@ module Gmail
     end
 
     def detailed
-      if self.class == Gmail::GmailObject
+      if self.class == GmailObject
         raise "Can't detail a generic GmailObject. It needs to be a Thread, Message, Draft or Label"
       end
 
@@ -48,7 +48,7 @@ module Gmail
     end
 
     def refresh
-      if self.class == Gmail::GmailObject
+      if self.class == GmailObject
         raise "Can't refresh a generic GmailObject. It needs to be a Thread, Message, Draft or Label"
       end
       @values = self.class.get(id).values

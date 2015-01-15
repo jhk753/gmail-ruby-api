@@ -1,31 +1,31 @@
 # encoding: utf-8
 module Gmail
   class Message < APIResource
-    include Gmail::Base::List
-    include Gmail::Base::Delete
-    include Gmail::Base::Get
-    include Gmail::Base::Modify
-    include Gmail::Base::Trash
+    include Base::List
+    include Base::Delete
+    include Base::Get
+    include Base::Modify
+    include Base::Trash
 
     after_initialize :set_basics
 
     def thread
-      Gmail::Thread.get(threadId)
+      Thread.get(threadId)
     end
 
     def create_draft
-      Gmail::Draft.create(message: msg_parameters)
+      Draft.create(message: msg_parameters)
     end
 
     def deliver!
       response = Gmail.request(self.class.base_method.to_h['gmail.users.messages.send'],{}, msg_parameters)
-      @values = Gmail::Message.get(response[:id]).values
+      @values = Message.get(response[:id]).values
       self
     end
 
     def deliver
       response = Gmail.request(self.class.base_method.to_h['gmail.users.messages.send'],{}, msg_parameters)
-      Gmail::Message.get(response[:id])
+      Message.get(response[:id])
     end
 
     def reply_all_with msg

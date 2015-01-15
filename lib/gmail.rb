@@ -107,7 +107,7 @@ module Gmail
       raise "error code: #{response.error},body: #{response.body})"
     end
 
-    r = Util.symbolize_names(response)
+    r = Gmail::Util.symbolize_names(response)
     if r[:error]
       raise "#{r[:error]}"
     end
