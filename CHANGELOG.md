@@ -15,3 +15,7 @@
 
 * updated dependencies
 
+## 0.0.6 / 2015-01-16
+
+* Added insert method for Message and some minor improvements
+

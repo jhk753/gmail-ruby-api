@@ -12,6 +12,11 @@ module Gmail
   def self.connect
 
   end
+
+  def self.client= value
+    @client = value
+  end
+
 end
 
 class Test::Unit::TestCase
