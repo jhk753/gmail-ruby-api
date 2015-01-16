@@ -286,6 +286,27 @@ module Gmail
 
     end
 
+    should "Reply to all construct should be easy and call getProfile if delivered_to is not set" do
+      m = Gmail::Message.new test_to_reply_message2
+      reply_message = Gmail::Message.new test_reply_message
+      @mock.expects(:execute).with(api_method: Gmail.service.users.to_h['gmail.users.getProfile'],parameters: {userId: "me"} , headers: {'Content-Type' => 'application/json'}).once.returns(test_response({emailAddress: "julie@juliedesk.com"}))
+      new_m = m.reply_all_with reply_message
+      expected_msg = Gmail::Message.new test_replied_message
+
+      assert_equal expected_msg.to, new_m.to
+      assert_equal expected_msg.cc, new_m.cc
+      assert_nil new_m.bcc
+      assert_equal expected_msg.subject, new_m.subject
+      assert_equal expected_msg.references, new_m.references
+      assert_equal expected_msg.in_reply_to, new_m.in_reply_to
+      assert_equal expected_msg.thread_id, new_m.thread_id
+      assert_equal expected_msg.body, new_m.body
+      assert_nil new_m.html
+      assert_nil new_m.text
+
+
+    end
+
     should "forward construct should be easy" do
       m = Gmail::Message.new test_to_reply_message
       forward_message = Gmail::Message.new(test_forward_message)
@@ -312,6 +333,20 @@ module Gmail
       assert_equal expected_msg.text, new_m.text
       assert_equal expected_msg.html, new_m.html
       assert_nil new_m.body
+    end
+
+    should "Insert call should be easy" do
+      m = Gmail::Message.new test_message
+      m.raw = m.raw
+      @mock.expects(:execute).with(api_method: Gmail.service.users.messages.insert, parameters: {userId: "me"}, body_object:{raw: m.raw, labelIds: test_message[:labelIds], threadId: test_message[:threadId]} , headers: {'Content-Type' => 'application/json'} ).twice.returns(test_response(test_message))
+      @mock.expects(:execute).with(api_method: Gmail.service.users.messages.get, parameters: {userId: "me", id: test_message[:id]}, headers: {'Content-Type' => 'application/json'}).twice.returns(test_response(test_message))
+
+
+      new_m = m.insert
+
+      assert_not_equal m.object_id, new_m.object_id
+      new_m = m.insert!
+      assert_equal m.object_id, new_m.object_id
     end
 
   end

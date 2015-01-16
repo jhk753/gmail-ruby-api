@@ -100,10 +100,16 @@ From this you can create a Draft in Gmail
     m.create_draft
 ```
 
-or just send the Message
+or send the Message
 
 ```ruby
     m.deliver
+```
+
+or simply insert the message in the user mailbox
+
+```ruby
+    m.insert
 ```
 
 Notice that the Message object can use from, to, cc, bcc, threadId, labelIds, text, html, body

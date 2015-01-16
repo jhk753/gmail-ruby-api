@@ -28,6 +28,17 @@ module Gmail
       Message.get(response[:id])
     end
 
+    def insert
+      response = Gmail.request(self.class.base_method.insert,{}, msg_parameters)
+      Message.get(response[:id])
+    end
+
+    def insert!
+      response = Gmail.request(self.class.base_method.insert,{}, msg_parameters)
+      @values = Message.get(response[:id]).values
+      self
+    end
+
     def reply_all_with msg
       msg = set_headers_for_reply msg
       msg = quote_in msg
@@ -126,21 +137,20 @@ module Gmail
 
     def set_headers_for_reply msg
       to_ar = []
-      split_regexp = Regexp.new "\s*,\s*"
-      if delivered_to
-        to_ar = to.split(split_regexp)
-        result = to_ar.grep(Regexp.new delivered_to)
-        if result
-          to_ar = to_ar - result
-        end
-      end
+      split_regexp = Regexp.new("\s*,\s*")
+      own_email = delivered_to || Gmail.mailbox_email
+      to_ar = to.split(split_regexp) + (cc || []).split(split_regexp)
+      result = to_ar.grep(Regexp.new(own_email, "i"))
+      to_ar = to_ar - result
+
       msg.subject = subject
-      msg.to = from
-      if cc.nil?
-        msg.cc = to_ar.join(", ")
+      if from.match(Regexp.new(own_email, "i"))
+        msg.to = to_ar.first
+        to_ar = to_ar.drop(1)
       else
-        msg.cc = (to_ar + cc.split(split_regexp)).join(", ")
+        msg.to = from
       end
+      msg.cc = to_ar.join(", ")
       msg.bcc = nil
       msg.threadId = thread_id
       msg.references = ((references || "").split(Regexp.new "\s+") <<  message_id).join(" ")

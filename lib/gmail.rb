@@ -25,7 +25,8 @@ require 'gmail/label'
 module Gmail
 
   class << self
-    attr_accessor :client_id, :client_secret, :refresh_token, :client, :service, :application_name, :application_version
+    attr_accessor :client_id, :client_secret, :refresh_token, :application_name, :application_version
+    attr_reader :service, :client, :mailbox_email
     def new hash
       [:client_id, :client_secret, :refresh_token, :application_name, :application_version].each do |accessor|
         Gmail.send("#{accessor}=", hash[accessor.to_s])
@@ -64,6 +65,10 @@ module Gmail
     end
     parse(response)
 
+  end
+
+  def self.mailbox_email
+    @mailbox_email ||= self.request(@service.users.to_h['gmail.users.getProfile'])[:emailAddress]
   end
 
   def self.connect(client_id=@client_id, client_secret=@client_secret, refresh_token=@refresh_token)

@@ -14,7 +14,8 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.authors = ["Julien Hobeika"]
   s.homepage = "http://github.com/jhk753/gmail-ruby-api"
-  
+  s.licenses = ['MIT']
+
   # runtime dependencies
   s.required_ruby_version = '>= 1.9.3'
   s.add_dependency "mime", ">= 0.1"
