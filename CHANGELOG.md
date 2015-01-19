@@ -19,3 +19,7 @@
 
 * Added insert method for Message and some minor improvements
 
+## 0.0.7 / 2015-01-19
+
+* Fix array empty errors for listing method
+
