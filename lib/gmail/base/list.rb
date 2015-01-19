@@ -10,7 +10,7 @@ module Gmail
             filters.merge!({maxResults: 100})
           end
           response = Gmail.request(base_method.send("list"), filters)
-          items = response["#{class_name.downcase}s".to_sym]
+          items = response["#{class_name.downcase}s".to_sym] || []
           next_page_token = response[:nextPageToken]
           opts[:items] = opts[:items] + items
 
