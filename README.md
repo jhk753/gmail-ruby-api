@@ -55,11 +55,11 @@ this will work for Messages and Threads
 
 ```ruby
    some_message.archive
-   some_message.un_archive
+   some_message.unarchive
    some_message.trash
-   some_message.un_trash
+   some_message.untrash
    some_message.star
-   some_message.un_star
+   some_message.unstar
    some_message.mark_as_read
    some_message.mark_as_unread
    
