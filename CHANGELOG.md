@@ -23,3 +23,7 @@
 
 * Fix array empty errors for listing method
 
+## 0.0.8 / 2015-01-29
+
+* minor fix
+
