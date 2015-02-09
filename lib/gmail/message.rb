@@ -139,7 +139,7 @@ module Gmail
       to_ar = []
       split_regexp = Regexp.new("\s*,\s*")
       own_email = delivered_to || Gmail.mailbox_email
-      to_ar = to.split(split_regexp) + (cc || "").split(split_regexp)
+      to_ar = (to || "").split(split_regexp) + (cc || "").split(split_regexp)
       result = to_ar.grep(Regexp.new(own_email, "i"))
       to_ar = to_ar - result
 
