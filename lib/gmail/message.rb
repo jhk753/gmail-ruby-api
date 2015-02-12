@@ -77,15 +77,15 @@ module Gmail
 
 
     def unread?
-      labelIds.include?("UNREAD")
+      (labelIds||[]).include?("UNREAD")
     end
 
     def sent?
-      labelIds.include?("SENT")
+      (labelIds||[]).include?("SENT")
     end
 
     def inbox?
-      labelIds.include?("INBOX")
+      (labelIds||[]).include?("INBOX")
     end
 
 
