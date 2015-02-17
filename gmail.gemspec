@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'google-api-client'
   s.add_dependency "hooks", ">=0.4.0"
   s.add_dependency "hashie", ">=3.3.2"
+  s.add_dependency "stringex"
   
   # development dependencies
   s.add_development_dependency "rake"
