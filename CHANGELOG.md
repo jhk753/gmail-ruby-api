@@ -31,3 +31,7 @@
 
 * minor fix
 
+## 0.0.10 / 2015-02-17
+
+* Fixed email parsing in forward and reply method when contact names contain ,
+
