@@ -286,6 +286,18 @@ module Gmail
 
     end
 
+    should "Construct correctly set_headers_for_reply" do
+      m = Gmail::Message.new({body: ""})
+      m.from = "\"John, Malkovich\" john@malkovich.com"
+      m.to = "\"Julie, Desk\"julie@juliedesk.com, \"Judith, Desk\"judith@juliedesk.com"
+      m.delivered_to = "julie@juliedesk.com"
+      new_msg = m.send(:set_headers_for_reply, Gmail::Message.new({body: ""}))
+
+      #assert_equal new_msg.from, "\"Julie, Desk\"julie@juliedesk.com"
+      assert_equal new_msg.to, "\"John, Malkovich\" john@malkovich.com"
+      assert_equal new_msg.cc, "\"Judith, Desk\"judith@juliedesk.com"
+    end
+
     should "Reply to all construct should be easy and call getProfile if delivered_to is not set" do
       m = Gmail::Message.new test_to_reply_message2
       reply_message = Gmail::Message.new test_reply_message
