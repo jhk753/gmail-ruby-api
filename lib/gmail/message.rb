@@ -124,14 +124,6 @@ module Gmail
       end
     end
 
-
-    def self.detect_emails str
-      #Mail::AddressList.new("#{str}".to_ascii).addresses.map(&:to_s)
-      Address.from_header("#{str}".to_ascii)
-    end
-
-
-
     private
 
     def msg_parameters
@@ -151,9 +143,7 @@ module Gmail
       own_email = delivered_to || Gmail.mailbox_email
 
 
-      to_ar = (Message.detect_emails(to) + Message.detect_emails(cc)).map{|address|
-        "#{address.display_name} <#{address.address}>"
-      }
+      to_ar = (Mail::AddressList.new("#{to}".to_ascii).addresses + Mail::AddressList.new("#{cc}".to_ascii).addresses).map(&:to_s)
       #to_ar = (to || "").split(split_regexp) + (cc || "").split(split_regexp)
       result = to_ar.grep(Regexp.new(own_email, "i"))
       to_ar = to_ar - result
@@ -224,49 +214,6 @@ module Gmail
           end
         end
         result
-      end
-    end
-
-    class Address
-      def initialize address, display_name, domain
-        @address = address
-        @display_name = display_name
-        @domain = domain
-      end
-
-      attr_reader :address, :display_name, :domain
-
-      def self.from_header h # returns an Array of Addresses
-        parse_multi_address h
-      end
-
-      private
-
-      def self.parse_multi_address string # splits address lines into multiple emails
-        return [] if string.nil? || string !~ /\S/
-        emails = string.gsub(/[\t\r\n]+/, " ").split(/,\s*(?=(?:[^"]*"[^"]*")*(?![^"]*"))/)
-        emails.map { |e| parse_address e }.compact
-      end
-
-      def self.parse_address string # ripped from sup
-        return if string.nil? || string.empty?
-
-        name, email, domain = case string
-                                when /^(["'])(.*?[^\\])\1\s*<(\S+?@(\S+?))>/
-                                  a, b, c = $2, $3, $4
-                                  a = a.gsub(/\\(["'])/, '\1')
-                                  [a, b, c]
-                                when /(.+?)\s*<(\S+?@(\S+?))>/
-                                  [$1, $2, $3]
-                                when /<(\S+?@(\S+?))>/
-                                  [nil, $1, $2]
-                                when /(\S+?@(\S+))/
-                                  [nil, $1, $2]
-                                else
-                                  [nil, string, nil] # i guess...
-                              end
-
-        Address.new email, name, domain
       end
     end
 
