@@ -151,9 +151,7 @@ module Gmail
       own_email = delivered_to || Gmail.mailbox_email
 
 
-      to_ar = (Message.detect_emails(to) + Message.detect_emails(cc)).map{|address|
-        "#{address.display_name} <#{address.address}>"
-      }
+      to_ar = Message.detect_emails(to).map(&:address) + Message.detect_emails(cc).map(&:address)
       #to_ar = (to || "").split(split_regexp) + (cc || "").split(split_regexp)
       result = to_ar.grep(Regexp.new(own_email, "i"))
       to_ar = to_ar - result
