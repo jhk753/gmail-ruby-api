@@ -29,9 +29,14 @@ If for your usecase, the gem is too limited there are two solutions for you:
 ## Initialization
 
 ```ruby
-    Gmail.client_id = "...Your app client id..."
-    Gmail.client_secret = "...Your app Secret..."
-    Gmail.refresh_token = "...the refresh token of the Gmail account you want to use..."
+    Gmail.client_id = "...Your app client id..." or the email from your service account credentials
+    Gmail.client_secret = "...Your app Secret..." or the pem version of hte api key for service account
+    Gmail.refresh_token = "...the refresh token of the Gmail account you want to use..." or the account email address for service account auth
+    # Or for service Accounts
+    Gmail.auth_method = "service_account"
+    Gmail.client_id = "... or the email from your service account credentials..."
+    Gmail.client_secret = "...pem version of the api key ..."
+    Gmail.auth_scopes = ['http://mail.google.com'] # an array of the permissions required.
 ```
 
 ## Usage

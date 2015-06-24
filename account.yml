@@ -1,5 +1,17 @@
-client_id: 992877924458-i6nbjvo0fspv8hpmpss0i9aglneqrdpm.apps.googleusercontent.com
-client_secret: n1qzVfpOog7Nmc3mSt6t5iSm
-refresh_token: 1/AqowDLtoeL61bbzwW_cv7sdGx3xElZAwAt42bm5lJRg
-application_name: Julie Desk
-application_version: 1.0.0
+# Auth Method
+google_api_auth_method: ENV['GOOGLE_API_AUTH_METHOD']
+
+#App Info
+application_name: ENV['APP_NAME']
+application_version: ENV['APP_VERSION']
+
+# Web Application Auth
+client_id: ENV['GOOGLE_API_CLIENT_ID']
+client_secret: ENV['GOOGLE_API_CLIENT_SECRET']
+refresh_token: ENV['GOOGLE_API_REFRESH_TOKEN']
+
+# Service Account Auth
+google_api_key: ENV['GOOGLE_API_KEY']
+google_api_email: ENV['GOOGLE_API_EMAIL']
+google_account: ENV['GOOGLE_ACCOUNT']
+
