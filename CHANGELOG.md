@@ -35,3 +35,6 @@
 
 * Fixed email parsing in forward and reply method when contact names contain ,
 
+## 0.0.11 / 2015-06-22
+
+* Forked to Carpela. Changed auth to work with Service Account

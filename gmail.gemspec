@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   "
   s.version = Gmail::VERSION
   s.platform = Gem::Platform::RUBY
-  s.authors = ["Julien Hobeika"]
-  s.homepage = "http://github.com/jhk753/gmail-ruby-api"
+  s.authors = ["Julien Hobeika","Keiran Betteley"]
+  s.homepage = "http://github.com/carpela/gmail-ruby-api"
   s.licenses = ['MIT']
 
   # runtime dependencies
