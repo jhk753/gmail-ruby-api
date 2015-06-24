@@ -24,10 +24,10 @@ module Gmail
 
   class << self
     attr_accessor :auth_method, :client_id, :client_secret, 
-      :refresh_token, :application_name, :application_version
+      :refresh_token, :auth_scopes, :email_account :application_name, :application_version
     attr_reader :service, :client, :mailbox_email
     def new hash
-      [:client_id, :client_secret, :refresh_token, :application_name, :application_version].each do |accessor|
+      [:client_id, :client_secret, :refresh_token, :auth_scopes, :email_account, :application_name, :application_version].each do |accessor|
         Gmail.send("#{accessor}=", hash[accessor.to_s])
       end
     end
@@ -111,7 +111,7 @@ module Gmail
 
 
 
-  def self.service_account_connect(client_id=@client_id, client_secret=@client_secret, email_account=@refresh_token, auth_scopes=@auth_scopes)
+  def self.service_account_connect(client_id=@client_id, client_secret=@client_secret, email_account=@email_account, auth_scopes=@auth_scopes)
   
     @client = Google::APIClient.new(application_name: 'stma', application_version: '0.0.1')
     
