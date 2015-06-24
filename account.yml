@@ -13,5 +13,5 @@ refresh_token: ENV['GOOGLE_API_REFRESH_TOKEN']
 # Service Account Auth
 google_api_key: ENV['GOOGLE_API_KEY']
 google_api_email: ENV['GOOGLE_API_EMAIL']
-google_account: ENV['GOOGLE_ACCOUNT']
-
+email_account: ENV['GOOGLE_ACCOUNT']
+auth_scopes: ENV['GOOGLE_AUTH_SCOPES']

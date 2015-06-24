@@ -36,6 +36,7 @@ If for your usecase, the gem is too limited there are two solutions for you:
     Gmail.auth_method = "service_account"
     Gmail.client_id = "... or the email from your service account credentials..."
     Gmail.client_secret = "...pem version of the api key ..."
+    Gmail.email_account = "...the email account you're going to use"
     Gmail.auth_scopes = ['http://mail.google.com'] # an array of the permissions required.
 ```
 
