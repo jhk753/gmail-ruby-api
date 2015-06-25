@@ -107,15 +107,17 @@ module Gmail
 
   end
 
+  def self.service_account_connect(
+    client_id=@client_id, client_secret=@client_secret,
+    email_account=@email_account, auth_scopes=@auth_scopes, 
+    application_name=@application_name, application_version=@application_version
+    )
+    put "authenticating service account"
+    
 
-
-
-
-
-
-  def self.service_account_connect(client_id=@client_id, client_secret=@client_secret, email_account=@email_account, auth_scopes=@auth_scopes)
-  
-    @client = Google::APIClient.new(application_name: 'stma', application_version: '0.0.1')
+    @client = Google::APIClient.new(application_name: application_name, application_version: application_version)
+      
+      
     
     key = Google::APIClient::KeyUtils.load_from_pem(
         client_secret,
