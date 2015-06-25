@@ -24,7 +24,7 @@ module Gmail
 
   class << self
     attr_accessor :auth_method, :client_id, :client_secret, 
-      :refresh_token, :auth_scopes, :email_account :application_name, :application_version
+      :refresh_token, :auth_scopes, :email_account, :application_name, :application_version
     attr_reader :service, :client, :mailbox_email
     def new hash
       [:client_id, :client_secret, :refresh_token, :auth_scopes, :email_account, :application_name, :application_version].each do |accessor|
