@@ -27,7 +27,7 @@ module Gmail
       :refresh_token, :auth_scopes, :email_account, :application_name, :application_version
     attr_reader :service, :client, :mailbox_email
     def new hash
-      [:client_id, :client_secret, :refresh_token, :auth_scopes, :email_account, :application_name, :application_version].each do |accessor|
+      [:auth_method, :client_id, :client_secret, :refresh_token, :auth_scopes, :email_account, :application_name, :application_version].each do |accessor|
         Gmail.send("#{accessor}=", hash[accessor.to_s])
       end
     end
@@ -44,6 +44,8 @@ module Gmail
   end
 
   def self.request(method, params={}, body={}, auth_method=@auth_method)
+    
+    puts auth_method
     params[:userId] ||= "me"
     if @client.nil?
       case auth_method
