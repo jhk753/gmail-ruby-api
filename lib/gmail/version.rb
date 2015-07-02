@@ -1,3 +1,3 @@
 module Gmail
-  VERSION = "0.0.11.1"
+  VERSION = "0.0.12"
 end # Gmail
