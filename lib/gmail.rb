@@ -112,7 +112,7 @@ module Gmail
     email_account=@email_account, auth_scopes=@auth_scopes, 
     application_name=@application_name, application_version=@application_version
     )
-    put "authenticating service account"
+    puts "authenticating service account"
     
 
     @client = Google::APIClient.new(application_name: application_name, application_version: application_version)
