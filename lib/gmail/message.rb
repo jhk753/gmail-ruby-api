@@ -108,16 +108,31 @@ module Gmail
         msg.header['X-Bcc'] = bcc unless bcc.nil?#because Mail gem doesn't allow bcc headers...
         msg.in_reply_to = in_reply_to  unless in_reply_to.nil?
         msg.references = references unless references.nil?
-        if text
-          msg.text_part = Mail::Part.new do |p|
-            content_type 'text/plain; charset=UTF-8'
-            p.body s.text
+        if text || html
+          bodypart = Mail::Part.new
+          if text
+            bodypart.text_part = Mail::Part.new do |p|
+              content_type 'text/plain; charset=UTF-8'
+              p.body s.text
+            end
           end
+          if html
+            bodypart.html_part = Mail::Part.new do |p|
+              content_type 'text/html; charset=UTF-8'
+              p.body s.html
+            end
+          end
+          msg.add_part bodypart
         end
-        if html
-          msg.html_part = Mail::Part.new do |p|
-            content_type 'text/html; charset=UTF-8'
-            p.body s.html
+        if attachments.present?
+          if attachments.is_a?(Hash)
+            attachments.each do |name, attachment|
+              msg.attachments[name] = attachment
+            end
+          elsif attachments.is_a?(Array)
+            attachments.each do |attachment|
+              msg.add_file(attachment)
+            end
           end
         end
         Base64.urlsafe_encode64 msg.to_s.sub("X-Bcc", "Bcc") #because Mail gem doesn't allow bcc headers...
