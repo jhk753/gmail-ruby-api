@@ -127,7 +127,7 @@ module Gmail
         if attachments.present?
           if attachments.is_a?(Hash)
             attachments.each do |name, attachment|
-              msg.attachments[name] = attachment
+              msg.add_file filename: name, content: attachment
             end
           elsif attachments.is_a?(Array)
             attachments.each do |attachment|
