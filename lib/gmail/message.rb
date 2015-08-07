@@ -124,7 +124,7 @@ module Gmail
           end
           msg.add_part bodypart
         end
-        if attachments.present?
+        if attachments
           if attachments.is_a?(Hash)
             attachments.each do |name, attachment|
               msg.add_file filename: name, content: attachment
