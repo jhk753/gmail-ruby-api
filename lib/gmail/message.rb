@@ -152,13 +152,17 @@ module Gmail
       msg
     end
 
+    def self.find_addresses str
+      Mail::AddressList.new("#{str}".to_ascii.gsub(/<(<(.)*@(.)*>)(.)*>/, '\1'))
+    end
+
     def set_headers_for_reply msg
       #to_ar = []
       #split_regexp = Regexp.new("\s*,\s*")
       own_email = delivered_to || Gmail.mailbox_email
 
 
-      to_ar = (Mail::AddressList.new("#{to}".to_ascii).addresses + Mail::AddressList.new("#{cc}".to_ascii).addresses).map(&:to_s)
+      to_ar = (Message.find_addresses(to).addresses + Message.find_addresses(cc).addresses).map(&:to_s)
       #to_ar = (to || "").split(split_regexp) + (cc || "").split(split_regexp)
       result = to_ar.grep(Regexp.new(own_email, "i"))
       to_ar = to_ar - result
