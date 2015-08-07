@@ -45,7 +45,6 @@ module Gmail
 
   def self.request(method, params={}, body={}, auth_method=@auth_method)
     
-    puts auth_method
     params[:userId] ||= "me"
     if @client.nil?
       case auth_method
