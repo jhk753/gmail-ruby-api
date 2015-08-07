@@ -46,14 +46,21 @@ module Gmail
   def self.request(method, params={}, body={}, auth_method=@auth_method)
     
     params[:userId] ||= "me"
-    if @client.nil?
-      case auth_method
-        when "web_application" 
+    
+    case auth_method
+      when "web_application" 
+        if @client.nil?
           self.connect
-        when "service_account"
+        end
+      when "service_account"
+        if @client.nil?
+          self.service_account_connect
+        elsif @client.email_account != @email_account
           self.service_account_connect
         end
-    end
+
+      end
+  
     if body.empty?
       response = @client.execute(
           :api_method => method,
