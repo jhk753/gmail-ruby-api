@@ -46,7 +46,9 @@ module Gmail
   def self.request(method, params={}, body={}, auth_method=@auth_method)
     
     params[:userId] ||= "me"
-    
+    puts "@client = #{@client}"
+    puts "Gmail.client = #{Gmail.client}"
+    puts "self.client = #{self.client}"
     case auth_method
       when "web_application" 
         if @client.nil?
@@ -55,7 +57,7 @@ module Gmail
       when "service_account"
         if @client.nil?
           self.service_account_connect
-        elsif @client.email_account != @email_account
+        elsif self.client.authorization.principal != @email_account
           self.service_account_connect
         end
 
