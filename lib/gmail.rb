@@ -20,15 +20,14 @@ require 'gmail/draft'
 require 'gmail/thread'
 require 'gmail/label'
 
-
-
 module Gmail
 
   class << self
-    attr_accessor :client_id, :client_secret, :refresh_token, :application_name, :application_version
+    attr_accessor :auth_method, :client_id, :client_secret, 
+      :refresh_token, :auth_scopes, :email_account, :application_name, :application_version
     attr_reader :service, :client, :mailbox_email
     def new hash
-      [:client_id, :client_secret, :refresh_token, :application_name, :application_version].each do |accessor|
+      [:auth_method, :client_id, :client_secret, :refresh_token, :auth_scopes, :email_account, :application_name, :application_version].each do |accessor|
         Gmail.send("#{accessor}=", hash[accessor.to_s])
       end
     end
@@ -44,11 +43,23 @@ module Gmail
 
   end
 
-  def self.request(method, params={}, body={})
+  def self.request(method, params={}, body={}, auth_method=@auth_method)
+    
     params[:userId] ||= "me"
-    if @client.nil?
-      self.connect
-    end
+    case auth_method
+      when "web_application" 
+        if @client.nil?
+          self.connect
+        end
+      when "service_account"
+        if @client.nil?
+          self.service_account_connect
+        elsif self.client.authorization.principal != @email_account
+          self.service_account_connect
+        end
+
+      end
+  
     if body.empty?
       response = @client.execute(
           :api_method => method,
@@ -70,6 +81,8 @@ module Gmail
   def self.mailbox_email
     @mailbox_email ||= self.request(@service.users.to_h['gmail.users.getProfile'])[:emailAddress]
   end
+
+
 
   def self.connect(client_id=@client_id, client_secret=@client_secret, refresh_token=@refresh_token)
     unless client_id
@@ -97,6 +110,30 @@ module Gmail
 
     #@service = @client.discovered_api('gmail', 'v1')
 
+  end
+
+  def self.service_account_connect(
+    client_id=@client_id, client_secret=@client_secret,
+    email_account=@email_account, auth_scopes=@auth_scopes, 
+    application_name=@application_name, application_version=@application_version
+    )
+    puts "Authenticating service account - #{email_account}"
+    
+
+    @client = Google::APIClient.new(application_name: application_name, application_version: application_version)
+      
+      
+    
+    key = Google::APIClient::KeyUtils.load_from_pem(
+        client_secret,
+        'notasecret')
+    asserter = Google::APIClient::JWTAsserter.new(
+        client_id,
+        auth_scopes, 
+        key
+    )
+    @client.authorization = asserter.authorize(email_account)
+    
   end
 
   def self.parse(response)
