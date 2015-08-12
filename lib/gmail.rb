@@ -46,9 +46,6 @@ module Gmail
   def self.request(method, params={}, body={}, auth_method=@auth_method)
     
     params[:userId] ||= "me"
-    puts "@client = #{@client}"
-    puts "Gmail.client = #{Gmail.client}"
-    puts "self.client = #{self.client}"
     case auth_method
       when "web_application" 
         if @client.nil?
@@ -120,7 +117,7 @@ module Gmail
     email_account=@email_account, auth_scopes=@auth_scopes, 
     application_name=@application_name, application_version=@application_version
     )
-    puts "authenticating service account"
+    puts "Authenticating service account - #{email_account}"
     
 
     @client = Google::APIClient.new(application_name: application_name, application_version: application_version)
