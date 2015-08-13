@@ -205,11 +205,13 @@ module Gmail
         end
 
         if payload.parts
-          text_part=@values.payload.find_all_object_containing("mimeType", "text/plain").first
+          content_payload = @values.payload.find_all_object_containing("mimeType", "multipart/alternative").first
+          content_payload ||= @values.payload
+          text_part=content_payload.find_all_object_containing("mimeType", "text/plain").first
           if text_part
             @values.text = urlsafe_decode64(text_part.body.data)
           end
-          html_part=@values.payload.find_all_object_containing("mimeType", "text/html").first
+          html_part=content_payload.find_all_object_containing("mimeType", "text/html").first
           if html_part
             @values.html = urlsafe_decode64(html_part.body.data)
           end
