@@ -43,7 +43,7 @@ If for your usecase, the gem is too limited there are two solutions for you:
 ## Usage
 
 ```ruby
-    require "Gmail"
+    require "gmail"
 ```
 
 ### Common methods
