@@ -108,16 +108,31 @@ module Gmail
         msg.header['X-Bcc'] = bcc unless bcc.nil?#because Mail gem doesn't allow bcc headers...
         msg.in_reply_to = in_reply_to  unless in_reply_to.nil?
         msg.references = references unless references.nil?
-        if text
-          msg.text_part = Mail::Part.new do |p|
-            content_type 'text/plain; charset=UTF-8'
-            p.body s.text
+        if text || html
+          bodypart = Mail::Part.new
+          if text
+            bodypart.text_part = Mail::Part.new do |p|
+              content_type 'text/plain; charset=UTF-8'
+              p.body s.text
+            end
           end
+          if html
+            bodypart.html_part = Mail::Part.new do |p|
+              content_type 'text/html; charset=UTF-8'
+              p.body s.html
+            end
+          end
+          msg.add_part bodypart
         end
-        if html
-          msg.html_part = Mail::Part.new do |p|
-            content_type 'text/html; charset=UTF-8'
-            p.body s.html
+        if attachments
+          if attachments.is_a?(Hash)
+            attachments.each do |name, attachment|
+              msg.add_file filename: name, content: attachment
+            end
+          elsif attachments.is_a?(Array)
+            attachments.each do |attachment|
+              msg.add_file(attachment)
+            end
           end
         end
         Base64.urlsafe_encode64 msg.to_s.sub("X-Bcc", "Bcc") #because Mail gem doesn't allow bcc headers...
@@ -190,11 +205,13 @@ module Gmail
         end
 
         if payload.parts
-          text_part=@values.payload.find_all_object_containing("mimeType", "text/plain").first
+          content_payload = @values.payload.find_all_object_containing("mimeType", "multipart/alternative").first
+          content_payload ||= @values.payload
+          text_part=content_payload.find_all_object_containing("mimeType", "text/plain").first
           if text_part
             @values.text = urlsafe_decode64(text_part.body.data)
           end
-          html_part=@values.payload.find_all_object_containing("mimeType", "text/html").first
+          html_part=content_payload.find_all_object_containing("mimeType", "text/html").first
           if html_part
             @values.html = urlsafe_decode64(html_part.body.data)
           end
