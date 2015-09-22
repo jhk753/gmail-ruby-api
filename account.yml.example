@@ -1,5 +1,17 @@
-client_id: example
-client_secret: example
-refresh_token: example
-application_name: example
-application_version: 1.0.0
+# Auth Method
+google_api_auth_method: ENV['GOOGLE_API_AUTH_METHOD']
+
+#App Info
+application_name: ENV['APP_NAME']
+application_version: ENV['APP_VERSION']
+
+# Web Application Auth
+client_id: ENV['GOOGLE_API_CLIENT_ID']
+client_secret: ENV['GOOGLE_API_CLIENT_SECRET']
+refresh_token: ENV['GOOGLE_API_REFRESH_TOKEN']
+
+# Service Account Auth
+google_api_key: ENV['GOOGLE_API_KEY']
+google_api_email: ENV['GOOGLE_API_EMAIL']
+email_account: ENV['GOOGLE_ACCOUNT']
+auth_scopes: ENV['GOOGLE_AUTH_SCOPES']
