@@ -57,8 +57,7 @@ module Gmail
         elsif self.client.authorization.principal != @email_account
           self.service_account_connect
         end
-
-      end
+    end
   
     if body.empty?
       response = @client.execute(

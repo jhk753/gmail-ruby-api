@@ -208,11 +208,11 @@ module Gmail
           content_payload = @values.payload.find_all_object_containing("mimeType", "multipart/alternative").first
           content_payload ||= @values.payload
           text_part=content_payload.find_all_object_containing("mimeType", "text/plain").first
-          if text_part
+          if text_part && text_part.body.data
             @values.text = urlsafe_decode64(text_part.body.data)
           end
           html_part=content_payload.find_all_object_containing("mimeType", "text/html").first
-          if html_part
+          if html_part && html_part.body.data
             @values.html = urlsafe_decode64(html_part.body.data)
           end
         end
