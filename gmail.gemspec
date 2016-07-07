@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   # runtime dependencies
   s.required_ruby_version = '>= 1.9.3'
   s.add_dependency "mime", ">= 0.1"
-  s.add_dependency "mail", "~> 2.2.1"
+  s.add_dependency "mail", ">= 2.2.1"
   s.add_dependency "activesupport"
   s.add_dependency 'google-api-client'
   s.add_dependency "hooks", ">=0.4.0"
