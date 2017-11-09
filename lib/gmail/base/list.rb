@@ -14,7 +14,7 @@ module Gmail
           next_page_token = response[:nextPageToken]
           opts[:items] = opts[:items] + items
 
-          if items.count < 100 || max_results == items.count
+          if items.count < 100 || items.count < max_results
             Util.convert_to_gmail_object(opts[:items], class_name.downcase)
           else
             max_results = (max_results == -1)?-1:max_results-items.count
